@@ -53,9 +53,8 @@ export async function proxy(request: NextRequest) {
         return NextResponse.redirect(new URL('/admin', request.url))
       }
       return NextResponse.redirect(new URL('/membro', request.url))
-    } else {
-      return NextResponse.redirect(new URL('/login', request.url))
     }
+    // If not logged in, just let them see the Landing Page
   }
 
   if (!user && isProtected) {
