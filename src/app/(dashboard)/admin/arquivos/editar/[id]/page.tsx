@@ -4,14 +4,15 @@ import { ArrowLeft, Save } from 'lucide-react'
 import Link from 'next/link'
 import { revalidatePath } from 'next/cache'
 
-export default async function EditarArquivoPage({ params }: { params: { id: string } }) {
+export default async function EditarArquivoPage({ params }: { params: Promise<{ id: string }> }) {
   const supabase = await createClient()
+  const { id } = await params
 
   // Fetch file
   const { data: file } = await supabase
     .from('stl_files')
     .select('*')
-    .eq('id', params.id)
+    .eq('id', id)
     .single()
 
   if (!file) {
@@ -33,7 +34,7 @@ export default async function EditarArquivoPage({ params }: { params: { id: stri
     await supabaseServer
       .from('stl_files')
       .update({ title, description, category })
-      .eq('id', params.id)
+      .eq('id', id)
 
     revalidatePath('/admin/arquivos')
     revalidatePath('/membro/acervo')
